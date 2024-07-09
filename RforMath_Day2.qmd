@@ -1,0 +1,277 @@
+---
+title: "Workshop on Computational Modeling: Day 2"
+subtitle: "CUNY CITE Project, May 30 - June 6, 2023"
+date: last-modified
+author:
+  - name: Nadia Kennedy
+    affiliation: City Tech Math
+  - name: Boyan Kostadinov
+    affiliation: City Tech Math
+  - name: Ariane Masuda
+    affiliation: City Tech Math
+format:
+  html: 
+      self-contained: true
+      theme: cerulean
+      code-fold: false
+      toc: true
+  pdf:
+     toc: false
+     number-sections: false
+     colorlinks: true
+highlight-style: atom-one
+code-block-bg: "#f9f9f9"
+code-line-numbers: true
+execute:
+  message: false
+  warning: false
+  echo: true
+---
+
+```{r}
+library(mosaic)
+library(mosaicCalc)
+```
+
+
+## Introduction
+
+This guide describes an educational R package called **mosaicCalc**, which provides software with a unified and consistent user interface for computing in calculus context. The R package **mosaicCalc** is the computational engine behind the [*MOSAIC Calculus*](https://www.mosaic-web.org/MOSAIC-Calculus/) textbook, available free online. 
+
+
+R is an environment and language for technical computing. Think of technical computing as serving the specialized needs of scientists and engineers. R is most widely associated with data science and statistics, but it is also well suited to calculus and many other diverse fields. This results, in part, from the "open source" nature of the R environment. An aspect of "open source" is that anyone can contribute new capabilities to the environment using an officially standardized format called an "R package." There are thousands of such packages available through the official distribution network called CRAN.
+
+
+## Overview of Commands 
+
+A "command" is a complete instruction to the computer to perform a specified task. There are only about a dozen commonplace tasks used in calculus. To begin, consider the familiar task of plotting the graph of a mathematical function. A function-graphing command needs to include at least three pieces of information: 
+
+1. Which type of graph to make.
+2. What mathematical function to graph.
+3. The bounds for the input(s) to the function.
+
+Constructing a command means laying out this information in a manner the computer can make sense of. Most **mosaicCalc** commands follow a consistent pattern. For instance: 
+
+```{r}
+slice_plot(x*sin(x) ~ x, bounds(x = 0:10))
+```
+
+The underlying pattern becomes more evident if we divide the command into parts, one for each piece of information.
+
+There are three elements in the command `slice_plot(x*sin(x) ~ x, bounds(x = 0:10))`: 
+
+1. The task name is the first element of every **mosaicCalc** command, and it is **always** followed by an *opening* parenthesis. The corresponding *closing* parenthesis goes at the very end of the command.
+
+2. Almost always, the function description is the second element of a **mosaicCalc** command, following the opening parenthesis. The function description is written in an R format called a "tilde expression", which defines a formula object. 
+
+3. Graphics commands always have a third element, the "bounds", specifying the region over which to plot the graph. The second and third elements of the command are function arguments and they must be separated by a comma. 
+
+Commands occasionally include additional, optional elements to give more details, such as the color of the graph. These are always separated from the previous elements by a comma.
+
+
+
+## Tilde Expressions
+
+An **expression** in computing is more or less like a sentence, phrase, or word in English: a meaningful unit of communication. A **tilde expression** is a type of statement in the R language that involves the character called "tilde" `~`. Here are some examples of tilde expressions, which are used mainly to specify mathematical functions:
+
+- `a*x^2 + b*x + c ~ x`
+- `exp(-k*t) ~ t`
+
+Note that each of these expressions is centered on the tilde character. Sometimes, you have to look very closely to distinguish tilde `~` from the minus sign `-`. 
+
+
+## Functions
+
+"Functions" are a fundamental structure both in mathematics and computer programming. Indeed, calculus is about the study and use of "continuous functions". The purpose of mathematical functions is to represent relationships between one quantity, called the "output," and other quantities called the "input" or "inputs." 
+
+Regrettably, the notation usually encountered in high-school mathematics is ambiguous about what is a function and what is not. Since calculus is the study of functions, the high-school ambiguity about functions leads to difficulty and frustration in many students who go on to study calculus. 
+
+**mosaicCalc** is designed to avoid the ambiguity introduced in high school. A first step in doing this is to point out key distinctions that high-school notation confuses: a "formula" versus an "equation" versus a "function": 
+
+- **Formulas** are instructions for carrying out a calculation. For example, $a x^2 + b x + c$ is a formula. If someone gave you a piece of paper with numerical values for $a, b, c$ and $x$, you could use the formula to carry out the calculation. Calculators are familiar tools to use for this purpose.
+
+- **Equations** are statements that center on an equal sign: $=$. Like a tilde expression, equations *always* involve a left side and a right side. A typical high-school equation is 
+
+$$y = m x + b$$
+
+The left and right sides are each formulas, although you might not recognize $y$ as a formula since it is so simple. Equations are properly used as a basis for re-organizing formulas. For instance, the equation $y - b = m x$ is a valid re-organization of $y=mx + b$.
+
+- **Functions** describe a relationship between one or more *inputs* and an output. For example, the sine function takes any number as input and produces as output a number between $-1$ and $1$. Likewise, the logarithm function takes any positive number as input and returns as output a number that can be anywhere from $-\infty$ to $\infty$.
+
+
+We describe functions by specifying three things:
+
+- The name of the function. For example, the name of the sine function in R is `sin`.
+- The name(s) of the function's input(s).
+- A formula for the output written in terms of the input names.
+
+The first task in defining a function for computing is to translate the formula into a tilde expression. 
+
+
+## Defining Base R Functions
+
+In R, the function called `f` is defined using the key word `function` and `x` represents the **argument** of the function. In defining functions, we don't use the equal sign. Instead, we use `<-` for assignment of a name to a computer object. The body of the function is inside the curly braces, which are optional if there is only one line of code, but required if there multiple lines of code in the function body:
+
+```{r}
+f <- function(x) {x^2}
+```
+
+-   What does the function `f` do?
+
+We can use built-in R functions inside our user-defined functions. For example:
+
+```{r}
+g<-function(x) exp(-x^2)
+```
+
+-   What does the function `g` do?
+
+We can evaluate any R function by calling its name and providing numerical values for the function argument(s).
+
+```{r}
+f(2)
+g(2)
+```
+
+Using the key word `function` is a way to define an R function using base R. However, we will use a different way to define an R function provided by the **mosaic** R package.
+
+
+## Function Parameters
+
+In general, a mathematical function has parameters in addition to the argument(s) or inputs.
+
+For example, the linear function $f(x)=a + bx$ has 2 parameters, $a$ and $b$, in addition to the argument (input) $x$. We want to be able to define an R function where we can also specify parameters, in addition to the argument(s). Package **mosaic** offers the `makeFun()` function, which does exactly that.
+
+## `makeFun()` of tilde expressions
+
+The native way to build functions in R, which we will NOT use, is via the `function` keyword, which has a special syntax involving both parentheses and curly braces. See the examples above.
+
+Instead, we will use the **mosaic** package's `makeFun()`; `makeFun()` takes an argument in the form of a **tilde expression**; tilde expressions are usually called "formulas", but this could be confused with mathematical formulas.
+
+A tilde expression is built around the tilde character: `~`. We use tilde expressions when we want to use names **symbolically**, that is, without being bound to a value. The R/mosaic software arranges tilde expressions consistently as:
+
+`formula  ~  input names`
+
+For example, a straight-line function given in mathematical notation:
+
+$$L(x) = 3x + 2$$
+
+can be defined as an R function using the `makeFun()` function:
+
+```{r}
+L <- makeFun(3*x + 2 ~ x)
+```
+
+We say that `L`, being the name of the function, is represented by the formula `3*x + 2` as a function of the input `x`. We can evaluate `L` by applying it to a numerical value of `x`.
+
+```{r}
+L(3)
+```
+
+
+## Function Parameters
+
+If a mathematical function has parameters, such as $h(x)=a\sin(bx)$, then we can still define this function using `makeFun()` in an intuitive way that turns into parameters all variables that are not specified as arguments:
+
+```{r}
+h<-makeFun(a*sin(b*x) ~ x)
+```
+
+In this case, the variable `x` is specified as an input argument since it is on the right-hand side of `~` so the names `a` and `b` will become parameters for the function. If we want to evaluate this function `h` then we must specify numerical values for the two parameters (`a` ans `b`) and the argument (`x`):
+
+```{r}
+h(x=2, a=3, b=4)
+```
+
+
+## Activity: `makeFun()` of functions
+
+Fill in the blanks.
+
+| `makeFun()` notation           | mathematical notation |
+|--------------------------------|-----------------------|
+| `g <- makeFun(3*exp(2*t) ~ t)` |                       |
+|                                | $f(y) = \sin(y^2)$    |
+|                                | $h(z) = 4z^2 + 2$     |
+| `k <- makeFun(4*sin(x+2) ~ x)` |                       |
+
+
+
+## Slice Plot
+
+Consider the plot of the function $h(x) = -2\sin(7x)$, having $x$ as an input. This is the previously defined function $h$ with parameter values $a=-2$ and $b=7$. 
+
+We can plot the graph of $h(x)$ using the `slice_plot()` function: 
+
+```{r fig.align="center"}
+slice_plot(h(x, a=-2, b=7) ~ x, bounds(x=-5:5))
+```
+
+Here the bounds for the plot correspond to setting an interval for the x-axis. This is done by using the function `bounds()`. Read `bounds(x=-5:5)` as meaning, "with `x` going from `-5` to `5`", where the colon mark `:`, corresponds to the "to". 
+
+We can also directly plot the graph of $h(x)$ by using a tilde expression: 
+
+```{r}
+slice_plot(-2*sin(7*x) ~ x, bounds(x=-5:5), npts=500)
+```
+
+Note that this time we increased the number of points to be plotted using the argument `npts=400`, which has a default value of 101. 
+
+- Is there any difference between the two plots? 
+
+
+
+## Activity: Plotting Graphs of Functions
+
+Use `slice_plot()` to plot the graphs of the following functions:
+
+1. $f(x)=x$
+2. $f(x)=x^2$
+3. $f(x)=x^{3/2}$
+4. $f(x)=e^x$
+5. $f(x)=\ln(x)$
+6. $f(x)=\sin(x)$
+7. $f(x)=\sqrt{x}$
+8. $f(x)=\frac{1}{x}$
+9. $f(x)=\frac{\sin(x)}{x}$
+10. $f(x)=e^{-x^2}$
+
+
+- Do you need any other information?
+
+
+
+
+
+## Optional: Computing in Calculus
+
+The `mosaicCalc` operations for differentiation and anti-differentiation are called `D()` and `antiD()` respectively. Like `makeFun()`, `D()` and `antiD()` take as a primary argument a **tilde expression**. If you have studied calculus before, you will be familiar with notation like $\frac{df}{dx}$ where $x$ is called the "with respect to ..." variable. This variable, an input to the function, is named in the right-hand side of the tilde expression, for example, we can compute: 
+
+$$\frac{d}{dx} \frac{a}{x} \ \ \ \text{and} \ \ \ \ \int e^{-k t} \sin(\omega t) dt$$
+Using the functions `D()` for derivative, and `antiD()` for the antiderivative: 
+
+```{r}
+D(a/x ~ x)
+antiD(exp(-k*t)*sin(omega*t) ~ t)
+```
+
+Mathematically, both differentiation and anti-differentiation take as input a function, which in **mosaicCalc** is in the form of a tilde expression. Both of them also return a function, but not in the form of a tilde expression. 
+
+
+## Optional: Functions with two inputs 
+
+Functions with two or more inputs have multiple names on the right-hand side of the `~`. For example, here is a function that happens to be important in physics and engineering:
+
+$$g(x, t) = e^{-kx} \sin(\omega t)$$
+
+The function name is $g$. The input names are $x$ and $t$, shown inside the parentheses following $g$. The formula is on the right-hand side of the $=$ sign. This is the definition of the mathematical function $g$. We can define an R function `g` using `makeFun()`:
+
+```{r}
+g <- makeFun(exp(-k*x)*sin(omega*t) ~ x & t)
+```
+
+Here, the function `g` is represented by the formula `exp(-k*x)*sin(omega*t)` as a function of `x` and `t`. 
+
+
+
+
