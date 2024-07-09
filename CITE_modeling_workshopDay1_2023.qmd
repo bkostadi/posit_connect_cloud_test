@@ -1,0 +1,526 @@
+---
+title: "Workshop on Computational Modeling: Day 1"
+subtitle: "CUNY CITE Project, May 30 - June 7, 2023"
+date: last-modified
+author:
+  - name: Nadia Kennedy
+    affiliation: City Tech Math
+  - name: Boyan Kostadinov
+    affiliation: City Tech Math
+  - name: Ariane Masuda
+    affiliation: City Tech Math
+format:
+  docx: 
+      toc: true
+  html: 
+      self-contained: true
+      theme: cerulean
+      code-fold: false
+      toc: true
+  pdf:
+     toc: false
+     number-sections: false
+     colorlinks: true
+highlight-style: atom-one
+code-block-bg: "#f9f9f9"
+code-line-numbers: true
+execute:
+  message: false
+  warning: false
+  echo: true
+---
+
+```{r, include=FALSE}
+library(rsconnect)
+writeManifest(appPrimaryDoc = 'CITE_modeling_workshopDay1_2023.qmd')
+```
+
+
+# What is Computational Thinking?
+
+```{=html}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mUXo-S7gzds" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen data-external="1"></iframe>
+```
+
+
+Computational Thinking (CT) has four major elements:
+
+1. **Algorithm** - A list of steps that you can follow to finish a task. 
+2. **Decomposition** - Breaking a problem down into smaller pieces. 
+3. **Abstraction** - The practice of ignoring certain details in order to come up with a solution that works for a more general problem. 
+4. **Pattern Matching** - Finding similarities between things. 
+
+
+The CT elements listed above are more or less equivalent to the following mathematical problem-solving techniques:
+
+1. $\text{Algorithm} \equiv \text{Solution}$
+2. $\text{Decomposition} \equiv \text{Scaffolding}$
+3. $\text{Abstraction} \equiv \text{Generalization}$
+4. $\text{Pattern Matching} \equiv \text{Inductive Reasoning}$
+
+
+::: {.callout-tip}
+## Inductive Reasoning
+The mathematical problem-solving technique that involves **pattern matching** is called **inductive reasoning**. Inductive reasoning is a logical process where patterns or observations are used to make generalizations or predictions about future cases. It is based on the idea that if a pattern holds true for a specific set of cases, it will likely hold true for similar cases in the future. Inductive reasoning is a valuable technique in mathematical problem solving as it helps mathematicians and problem solvers make conjectures, develop hypotheses, and discover new mathematical relationships based on observed patterns.
+:::
+
+
+## CT Examples
+
+### CT in Mathematics
+
+::: {#exm-sum1}
+## Quick Sum
+Sum up all of the integers between 1 and 200. However, you have a time constraint of 3 min to sum up the numbers. Can you do it without using technology?
+
+The story goes that Gauss invented this algorithm at the age of 8 when his teacher asked him to sum the integers from 1 to 100 hoping that this would keep Gauss busy for some time, only to be shocked by the fact that Gauss gave him the correct answer within seconds. 
+:::
+
+
+::: {.callout-tip collapse="true"}
+## Quick Sum Solution
+
+The problem is to find the sum:
+
+$$S= 1 + 2 + 3 + \cdots + 200$$
+
+However, given the time constraint, we have to think of a faster algorithm than simply adding the numbers one by one. 
+
+1. **Algorithmic Thinking:** Think of an **algorithm** i.e. a sequence of steps that would allow you to sum up the numbers within the time constraint without having to sum up all numbers one by one. 
+2. **Decomposition:** Think how to break up the problem into smaller problems. Write the sequence of numbers, and underneath write the same sequence but in reverse order:
+
+\begin{align}
+1 & + 2 + 3 + \cdots + 200 \\
+& 200 + 199 + 198 + \cdots + 1
+\end{align}
+
+Break the problem up into smaller pieces by looking at the sum of the pairs of numbers on the top of each other:
+
+ - What is 200 + 1?
+ - What is 199 + 2?
+ - What is 198 + 3?
+ - Do you see a pattern? 
+
+This is where you can use **pattern recognition** to conclude that all pairs sum to 201. 
+
+- How many pairs do we have? 
+- What does the sum of all pairs represent in terms of the original sum $S$?
+- Can you derive a formula for the original sum $S$?
+- You can use R and RStudio as a calculator to compute the value of $S$.
+
+```{r}
+200*201/2
+```
+
+:::
+
+
+::: {#exm-sum2}
+## Abstraction
+Can we use the quick sum algorithm to do this with other numbers?
+
+- Can we use this algorithm to sum the first 2,000 positive integers, starting with 1?
+- How about the first 20,000?
+- What stays the same? What is different?
+:::
+
+
+::: {.callout-tip collapse="true"}
+## Abstraction Solution
+
+This is where **abstraction** comes into play. We can generalize the problem by using a variable name like $N$ to represent the final integer value. Now, we have to find the sum:
+
+$$S= 1 + 2 + 3 + \cdots + N$$
+
+We can generalize the algorithm above in a way that will work for any number $N$. 
+
+Following the logic of the above algorithm, we have $N$ pairs whose sum is $N+1$ for each pair, but the sum of all pairs is $2S$, thus:
+
+$$2S = N \times (N+1) \implies S = \frac{N(N+1)}{2}$$
+This formula allows us to find the sum $S$ for any given $N$. We can implement this formula as a function using the R programming language. Running the chunk code below implements the function `S` having `N` as an argument:  
+
+```{r}
+# S is the name of the function and N is the argument
+S <- function(N) N*(N+1)/2
+```
+
+Any time we want to find the sum $S$ for a given $N$, we can call this function `S` and evaluate it. 
+
+```{r}
+# the sum of the first 200 positive integers starting with 1
+S(200)
+```
+It is equally easy to find the sume of the first 2000 positive integers, starting with 1. 
+
+```{r}
+# the sum of the first 2000 positive integers starting with 1
+S(2000)
+```
+
+:::
+
+
+::: {#exr-1}
+Find an algorithm (solution) for the following problems:
+
+- What is the sum of the first 10 positive even integers? 
+- What is the sum of the first 10 odd positive integers?
+- Find a formula for the sum of the first $n$ positive even integers.
+- Find a formula for the sum of the first $n$ positive odd integers.
+
+**Hint:** Try to use the logic that Gauss used to come up with an algorithm and generalize it to find the formula $n(n+1)$ for the sum of the first $n$ (positive) even integers, and the formula $n^2$ for the sum of the first $n$ (positive) odd integers. 
+:::
+
+::: {.callout-tip collapse="true"}
+## Computational Solution of @exr-1 using R
+A computational way of solving @exr-1 using R is to first generate the sequences of even or odd numbers with given lengths, using the `seq()` functions, and then sum up the sequences by applying the `sum()` function to them.  
+
+```{r}
+# summing the first 10 even integers
+even10 <- seq(from=2, by=2, length.out=10)
+# the sequence of the first 10 even integers
+print(even10)
+# their sum
+sum(even10)
+# summing the first 10 odd integers
+odd10 <- seq(from=1, by=2, length.out=10)
+# the sequence of the first 10 even integers
+print(odd10)
+# their sum
+sum(odd10)
+```
+:::
+
+
+This is all to show that if you use the tools of Computational Thinking (decomposition, pattern matching, abstraction, and algorithms), then you can figure out how to solve problems that no one has already taught you how to solve, just like we did here! Developing this kind of computational thinking will be an extremely powerful skill you can use for the rest of your life, and especially as a teacher!
+
+
+
+### Pencil Code Playground
+
+[Pencil Code Playground](https://gym.pencilcode.net/draw/#/draw/blank.html), developed by Google engineers, provides a great playground for visual and text-based programming with a turtle. You can find materials for teachers, teaching manual and other resources at [pencilcode.net](https://pencilcode.net/). You can create art, create music or code an adventure, and you can choose of the playgrounds to get creative. 
+
+
+::: {exm-pc1}
+## Drawing a Square
+
+- Give an **algorithm** to draw a square. 
+- **Decompose** the problem into a number of steps. Write down the steps. 
+- Do you see any **pattern** in the list of steps?
+- Do you know of a programming construct that allows you to repeat a certain group of steps any number of times you want? 
+
+Any time you realize that you keep repeating a certain group of steps, you can use a **for loop** to repeat these steps any given number of times you want. 
+:::
+
+
+::: {.callout-tip collapse="true"}
+## Drawing a Square Pencil Code
+
+In Pencil Code, a square can be created with the commands:
+
+```{r, eval=FALSE}
+pen blue 
+fd 100
+rt 90
+fd 100 
+rt 90
+fd 100
+rt 90
+fd 100
+rt 90
+```
+
+See the code in the [Pencil Code playground](https://bobo2023.pencilcode.net/edit/Square1). 
+
+Instead of repeating the group of steps `fd 100; rt 90` 4 times, we can put this group inside a **for loops** that runs 4 times:
+
+```{r, eval=FALSE}
+pen blue 
+for [1..4]
+  fd 100 
+  rt 90
+```
+
+See the code in the [Pencil Code playground](https://bobo2023.pencilcode.net/edit/Square2). 
+
+:::
+
+
+# What is Mathematical Modeling?
+
+```{=html}
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_1BFNNvg2ec" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen data-external="1"></iframe>
+```
+
+
+In the course of a student's mathematics education, the word "model" is used in many ways. Several of these, such as manipulatives, demonstration, role modeling, and conceptual models of mathematics, are valuable tools for teaching and learning. However, they are different from the practice of mathematical modeling. Mathematical modeling, both in the workplace and in school, uses the language of mathematics to answer big, complex, messy, real-world problems.  
+
+::: {.callout-important}
+## What is Mathematical Modeling?
+
+**Mathematical modeling is a process that uses the language of mathematics to represent, explore, analyze, make predictions or otherwise provide insight into real-world problems.**
+::: 
+
+## THE MODELING PROCESS
+
+A real-world problem is first translated into a math problem. After introducing various labels and the variables that we want to build our model with, we then transform the problem into a word problem. Adding meaning to this word problem makes it an application problem. Finally, adding interpretation and analysis makes it a modeling problem. These ideas for how to transform questions are illustrated in @fig-process. 
+
+
+![Transforming a math problem into a modeling problem. Source: GAIMME 2019 Report by COMAP and SIAM,  ](ModelingProcess.png){#fig-process}
+
+
+
+According to the GAIMME Report, Mathematical Modeling is a process made up of the following components:
+
+----
+
+**IDENTIFY THE PROBLEM**
+
+We identify some phenomena in the real world we want to understand. The result is a question about the real world.
+
+**MAKE ASSUMPTIONS AND IDENTIFY VARIABLES**
+
+We select "objects" that seem important in the real world question and identify relations between them. We decide what we will keep and what we will ignore about the objects and their interrelations. The result is an idealized version of the original question, which will lead to a simplified model that captures some key characteristics of the real-world problem.
+
+**DO THE MATH**
+
+We translate the idealized version into mathematical terms and obtain a mathematical formulation of the idealized question. This formulation is the model. We do the math to see what insights and results we get. However, for most real-world problems "doing the math" really means implementing the math on the computer, using a scientific programming language. This is what makes the math modeling process a computational math modeling. 
+
+**ANALYZE AND ASSESS THE SOLUTION**
+
+Does the solution address the problem? Does it make sense when translated back from the mathematical language into the real world? Are the results practical, the answers reasonable, the consequences acceptable? This component may require "sensitivity analysis", which measures how sensitive the model outputs are to the model inputs. 
+
+**ITERATE**
+
+If we need a more complex model to get better answers, we may need to iterate the process as needed to refine and extend our model to get a more realistic solution.  
+
+**IMPLEMENT THE MODEL**
+
+For real-world, practical applications, we usually must implement our model and obtain a numerical solution. 
+
+**REPORTING**
+
+Reporting and communicating our results to others is the final step in the modeling process. 
+
+----
+
+::: {.callout-important}
+In this workshop, our computational and reporting platform will be R and Quarto in RStudio. 
+:::
+
+
+::: {.callout-tip}
+## A Puzzle
+Two very close friends were walking towards a river, and there was a red boat on the river bank. Even though the boat could take one person only, both of them managed to cross the river. 
+
+- How did that happen? 
+- What is the moral of the story?
+
+The image was generated by **getimg.ai**. 
+
+![](river.png){width=55% fig-align="center"}
+:::
+
+
+::: {.callout-important}
+It is important to realize that learning to apply mathematics is a very different activity from learning mathematics. The skills needed to be successful in applying mathematics are quite different from those needed to understand concepts, to prove theorems or to solve equations. There is no theory to learn and there are only a few guiding principles. This is not to suggest, however, that mathematical modeling is an easy subject. The difficulty is not only in learning and understanding the mathematics involved but also in seeing where and how to apply it and how to translate each problem into a mathematical form. This is the essence of modeling, and it can involve discussions to clarify the problem, identification of problem variables, assumptions, estimations, approximations, and almost always computational implementations. 
+:::
+
+
+## Empirical Models
+
+It is possible to build our mathematical models out of the abstract concepts of mathematics using simply pen and paper or blackboard and chalk. During the model-building activity, we are in a dream world of idealizations and imagination but the real world is still somewhere in the background. If our models are to be more than just curiosities of interest only to mathematicians, they must be made to confront reality and it is through data or conclusions made from data that this confrontation occurs.
+
+By data we mean any facts, measurements or observations which have been collected in the real world. They may well be inaccurate and imperfect but, as far as we can tell, they represent the truth with which our models have to be compared. Interaction between models and data occurs in a number of ways, among which are the following:
+
+1. Data can be useful in suggesting models or parts of models during the development stage when we are trying to form our ideas. Some models (referred to as "empirical") can even be based entirely on data.
+
+2. Data are needed to estimate the values of parameters appearing in a model. This process of estimating particular parameter values for a particular application is sometimes called "calibrating" a model.
+
+3. Data are needed to test a model, i.e. to check whether our model's predictions correspond reasonably well to what is observed in the real world. We may also wish to choose the best out of a number of alternative models.
+
+When you are given a modeling problem, there may be some data that go with it and in some cases you may have to use what you are given and no more. Very often, however, there is the possibility or the need to obtain more data. The task of collecting such data often turns out to be harder than you think. 
+
+
+::: {.callout-important}
+## Empirical Model
+An empirical model is one which is derived from and based entirely on data. In such a model, relationships between variables are derived by looking at the available data on the variables and selecting a mathematical form which is a compromise between accuracy of fit and simplicity of mathematics. 
+:::
+
+It will always be possible to arrange a perfect fit, if necessary, by using a sufficiently complicated mathematical formula, but this is hardly a sensible approach. What is usually required is the simplest formula which will give an adequate fit. The important distinction is that empirical models are not derived from assumptions concerning the relationships between variables, and they are not based on physical laws or principles. When we have no principles to guide us and no obvious assumptions suggest themselves, we may turn to the data to find how some of our variables are related.
+
+The first step in deriving an empirical model is to plot the data. More precisely, we want to visualize the relationship between any two variables of interest. The simplest case will be when all the points have a strong linear relationship and cluster around a line. In this case, we try to fit a line to the data. If the plot clearly shows that the relationship between the two variables is not linear, then we try to plot one or both variables as logarithms, the idea being to get a plot, which is reasonably straight. This approach often works since many natural phenomena obey power laws. 
+
+
+::: {.callout-important}
+## Machine Learning and AI
+Building empirical models by fitting mathematical models to data is the backbone of modern Machine Learning in Data Science and Artificial Intelligence. In this workshop, we will focus on building empirical models using real data.  
+:::
+
+
+
+# Discovering Kepler's 3rd Law from Planetary Data
+
+
+## Visualizing the planetary data from NASA
+
+
+```{r, echo=FALSE}
+library(tidyverse) # professional data analysis and visualizations
+library(mosaic) # educational package
+library(mosaicCalc) # educational package
+library(knitr) # for printing tables
+library(kableExtra)
+```
+
+
+In this data-inspired project, we illustrate how **Kepler's Third Law of Planetary Motion** can be discovered using **empirical modeling** to fit a mathematical model to real planetary data from NASA. 
+
+::: {.callout-tip collapse="true"}
+## Johannes Kepler (1571 - 1630)
+Johannes Kepler was the young assistant of the 16th century Danish astronomer Tycho Brahe (1546 - 1601), considered the father of modern astronomy. He was also famous for having an artificial “silver” nose made from plated metal, which he needed after he lost his nose in a duel with his third cousin, when he was 20 years old, over a dispute who was the better mathematician! 
+
+Brahe had the amazing skill of being able to measure planetary position, by naked eye and his well-designed instruments, with amazing accuracy, as the telescope was not invented until 1608, seven years after his death, which was a tragic loss since he died from a bladder failure after extreme politeness prevented him from using the bathroom during a royal banquet in October 1601, causing his bladder to burst.
+
+Brahe made very accurate and comprehensive astronomical observations, but it took the mathematical genius of Kepler and two decades of hard work to fit Brahe’s data to three simple empirical laws of planetary motion. By 1609, Kepler had formulated his first two laws:
+
+1. Each planet moves on an ellipse with the sun at one of the foci. 
+2. For each planet, the line from the sun to the planet sweeps out equal areas in equal times.
+
+Kepler spent the next decade verifying these two laws and formulating a third law, which relates the orbital periods and mean distances from the Sun. As with all his laws, this was based on observational data and, published in 1619. 
+:::
+
+
+We use planetary data collected from NASA's Lunar and Planetary Science Division. 
+
+::: {.callout-note}
+Technically, Pluto was demoted from being a planet, when it was recently discovered that it was even smaller than we thought, given that Australia, which measures about 4,000 km wide, is almost twice the size of Pluto's diameter, which is only about 2,300 km across. In fact, Pluto's orbit is closer to that of a comet than a planet. 
+:::
+
+
+```{r}
+# vector of average distances from the Sun in units of 10^6 km
+dist<-c(57.9,108.2,149.6,227.9,778.6,1433.5,2872.5,4495.1,5906.4) 
+# vector of orbital periods in Earth's days
+period<-c(88,224.7,365.2,687,4331,10747,30589,59800,90560)
+# dataframe with planetary data
+nasa_data<-tibble(D=dist, T=period)
+```
+
+
+```{r, echo=FALSE}
+table_data<-nasa_data
+planet<-c("Mercury","Venus","Earth","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto") 
+row.names(table_data)<-planet # use planet names as the row names
+colnames(table_data)<-c("Distance D [$10^6$ km]", "Period T [Earth's Days]") 
+# print a table of planetary data
+kable(table_data, format="simple", booktabs = TRUE, caption = "NASA's Planetary Data") |> 
+  kable_styling(position = "center")
+```
+
+
+To determine empirical law that the two variables `D` and `T` may satisfy, we create a scatter plot of the orbital period `T` against `D`, the mean distance from the Sun. This is shown in @fig-plot1 and it clearly illustrates a nonlinear form for the relationship. 
+
+We can create the scatter plot with the `gf_point()` function from the **mosaic** R package. The first argument is a formula object `T ~ D`, which specifies the $y$ variable on the left-hand side and the $x$ variable on the right-hand side. We must provide the dataframe `nasa_data` that contains the data variables `T` and `D`. 
+
+```{r}
+#| label: fig-plot1
+#| fig-cap: "Scatter plot of orbital periods $T$ against mean distances $D$ from the Sun."
+gf_point(T ~ D, color="blue", size=1.5, data=nasa_data)
+```
+
+It is often a good idea to transform the data and visualize the relationship between the transformed data in our pursuit to discover any useful patterns. Many natural phenomena are in the form of power laws, thus transforming the data to a log-log scale by taking logarithms of both distance and period, is a natural transformation to consider. We can add to the dataframe `nasa_data` two new variables (columns), one called `logT` with the natural logarithms of the orbital periods, and a second one called `logD` with the natural logarithms of the mean distances from the Sun. This data transformation is done using the `mutate()` function from the **dplyr** package from the **tidyverse** collection of packages developed by RStudio for doing modern data science. 
+
+```{r}
+nasa_data <- nasa_data |> 
+  mutate(logT=log(T), logD=log(D))
+```
+
+
+The log-log plot of `logT` vs. `logD` is shown in @fig-plot2. 
+
+```{r}
+#| label: fig-plot2
+#| fig-cap: "The log-log plot after both variables are transformed logarithmically."
+gf_point(logT ~ logD, size=1.5, color="blue", data=nasa_data)
+```
+
+
+- Do you see anything interesting on this plot?
+- Do you see anything else interesting on this plot?
+- What do you think we should do next? 
+
+
+::: {.callout-note collapse="true"}
+## Observations from the log-log plot
+
+- The planets appear to be positioned along a straight line on the log-log scale, and this is a strong evidence that the original data must satisfy a power law. 
+
+- The gap between Mars and Jupiter, which is about double the size of the other gaps, is the region of the solar system where the **asteroid belt** is located. 
+
+- It makes sense to fit a line to these data points, which appear aligned perfectly along a line. 
+:::
+
+We can fit a line to the logarithmically transformed data points: 
+
+$$\log(T) = a + b\log(D)$$
+
+Fitting a line means fitting the model parameters $a$ and $b$ to the data. This kind of model fitting is done using **linear least squares**, which is an optimization problem related to minimizing the so called SSE (sum of squared errors) between the values predicted by the model and the actual observations. 
+
+::: {.callout-note}
+A natural place to discuss linear least squares would be a linear algebra course where the linear least squares problem is formulated as **solving a linear system of equations that does not have a solution**. The linear least squares problem was first solved by Gauss and it is the backbone of empirical modeling, which is the heart of modern machine learning and AI applications.  
+
+- Have you seen linear least squares in any of the courses you have taken?
+:::
+
+We can use the `fitModel()` function from the **mosaic** package to fit our mathematical model to the data. The first argument is the formula `logT ~ a+b*logD`, which specifies our model, with parameters `a` and `b` to be fitted to the data. Note that `logT` and `logD` are just the names of the data variables that contain the logarithms of `T` and `D`, as we defined them earlier in `nasa_data`. 
+
+```{r}
+fitted_model<-fitModel(logT ~ a+b*logD, data=nasa_data)
+```
+
+We can extract the fitted parameters `a` and `b` from the fitted model using `coef(fitted_model)`. 
+
+```{r}
+# vector of fitted parameters
+param<-coef(fitted_model)
+param
+```
+
+
+- Can you reconstruct $T$ as a function of $D$? 
+
+::: {.callout-tip collapse="true"}
+## $T=f(D)$
+
+$$T=e^a D^b$$
+:::
+
+Now, we can create an R function called `Tmodel` using `makeFun()` that implements $T$ as a function of $D$, using the fitted model parameters. Note that in `makeFun()` the formula `exp(a)*D^b ~ D` specifies the left-hand side as a function of the right-hand side `D`. Don't forget the multiplication operator `*`. Also, $e^a$ is not `e^a` in R, but rather the exponential function `exp()` applied to `a`, i.e. `exp(a)`. This is a common mistake students make. 
+
+```{r}
+a<-param[1] # first parameter is a
+b<-param[2] # second parameter is b
+Tmodel<-makeFun(exp(a)*D^b ~ D)
+```
+
+The `Tmodel` function represents the fitted power model as a function of `D`:
+
+$$T = `r round(exp(a),3)`D^{`r round(b,3)`}$$
+
+This is in fact Kepler's Third Law that says that the orbital period is proportional to the fractional $3/2$ power of the mean distance from the Sun:
+
+$$T = K D^{3/2}$$
+We can create the graph of the fitted power model and plot it over the planetary data. 
+
+```{r}
+#| label: fig-plot3
+#| fig-cap: "The fitted power model superimposed on the planetary data."
+# optional planet sizes and colors
+colors<-c("black","brown","blue","red","orange","gold","lightblue","darkblue","black")
+sizes<-c(1/3,0.9,1,1/2,11,9,4,3.9,1/5)
+gf_point(T ~ D, color=colors, size=sizes, data=nasa_data) |> 
+  slice_plot(Tmodel(D) ~ D, domain(D=range(0,6000)), color="red", alpha=0.6)
+```
+
+
